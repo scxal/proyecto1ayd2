@@ -1,0 +1,7 @@
+    [javac] Compiling 1 source file to /home/scxal/Descargas/c/Compi1Proyecto1/build/classes
+      [jar] Building jar: /home/scxal/Descargas/c/Compi1Proyecto1/build/jar/Compi1_Proyecto1.jar
+    [junit] Running JUnit_Tests
+    [junit] Testsuite: JUnit_Tests
+    [junit] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.078 sec
+    [junit] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.078 sec
+    [junit] 

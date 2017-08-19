@@ -1,0 +1,55 @@
+package Parsers2;
+import java_cup.runtime.*;
+parser code
+{:
+/**Metodo al que se llama automáticamente ante algún error sintactico.*/
+public void syntax_error(Symbol s){
+compi1_proyecto1.Menu.erroresText.setText(compi1_proyecto1.Menu.erroresText.getText().concat("\nError en la Línea " + (s.right+1) + ". Columna " + s.left + ". Identificador " + s.value + " no reconocido." ));
+compi1_proyecto1.Compi1_Proyecto1.otroArch2();
+}
+
+/**Metodo al que se llama en el momento en que ya no es posible una recuperación de errores.*/
+public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+compi1_proyecto1.Menu.erroresText.setText(compi1_proyecto1.Menu.erroresText.getText().concat("\nError en la Línea " + (s.right+1) + ". Columna " + s.left + ". Identificador " + s.value + " no reconocido." ));
+compi1_proyecto1.Compi1_Proyecto1.otroArch2();
+}
+:}
+terminal cEscenario, axmeta, cxmeta, axextras, cxextras, axarmas, cxarmas, axbonus, cxbonus, aparedes, cparedes, puntos, apersonas, cpersonas, cParen, aheroe, cheroe, avillanos, cvillanos, pnombre, pxnombre, numero, puntoComa, igual, coma, mayorQue, talto, tancho, aEscenario;
+non terminal INICIA, S, SA, META_START, META_B, PAREDES_START, EXTRAS_START, EXTRAS_B, EXTRAS_C, EXTRAS_D, EXTRAS_E, EXTRAS_F, PERSON_START, PERSON_B, PERSON_C, PERSON_E, PERSON_F, PAREDES_H, PAREDES_I, PAREDES_J, PAREDES_K, PAREDES_L;
+start with INICIA;
+
+INICIA::= aEscenario pxnombre {:compi1_proyecto1.Compi1_Proyecto1.saveFondo((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} tancho igual numero {:compi1_proyecto1.Compi1_Proyecto1.setAncho((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} puntoComa talto igual numero {:compi1_proyecto1.Compi1_Proyecto1.setAlto((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} mayorQue S cEscenario;
+
+S::= SA | SA S;
+SA::= EXTRAS_START
+    |PERSON_START
+    |PAREDES_START
+    |META_START;
+
+META_START::= axmeta {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();:} META_B cxmeta;
+META_B::= pnombre {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();compi1_proyecto1.Compi1_Proyecto1.updateNameArch2((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} numero {:compi1_proyecto1.Compi1_Proyecto1.setXini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} coma numero {:compi1_proyecto1.Compi1_Proyecto1.setYini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} cParen {:compi1_proyecto1.Compi1_Proyecto1.setMeta();:} puntoComa;
+
+EXTRAS_START::= axextras {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();:} EXTRAS_B cxextras;
+EXTRAS_B::= axarmas EXTRAS_C cxarmas axbonus EXTRAS_E cxbonus | axbonus EXTRAS_E cxbonus axarmas EXTRAS_C cxarmas;
+EXTRAS_C::= pnombre {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();compi1_proyecto1.Compi1_Proyecto1.updateNameArch2((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} numero {:compi1_proyecto1.Compi1_Proyecto1.setXini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} coma numero {:compi1_proyecto1.Compi1_Proyecto1.setYini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} cParen {:compi1_proyecto1.Compi1_Proyecto1.activarArma();:} EXTRAS_D;
+EXTRAS_D::= puntoComa | puntoComa EXTRAS_C;
+EXTRAS_E::= pnombre {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();compi1_proyecto1.Compi1_Proyecto1.updateNameArch2((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} numero {:compi1_proyecto1.Compi1_Proyecto1.setXini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} coma numero {:compi1_proyecto1.Compi1_Proyecto1.setYini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} cParen {:compi1_proyecto1.Compi1_Proyecto1.activarBonus();:} EXTRAS_F;
+EXTRAS_F::= puntoComa | puntoComa EXTRAS_E;
+
+PERSON_START::= apersonas {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();:} PERSON_B cpersonas;
+PERSON_B::= aheroe PERSON_C cheroe avillanos PERSON_E cvillanos | avillanos PERSON_E cvillanos aheroe PERSON_C cheroe;
+PERSON_C::= pnombre {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();compi1_proyecto1.Compi1_Proyecto1.updateNameArch2((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} numero {:compi1_proyecto1.Compi1_Proyecto1.setXini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} coma numero {:compi1_proyecto1.Compi1_Proyecto1.setYini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} cParen {:compi1_proyecto1.Compi1_Proyecto1.activarHeroe();:} puntoComa;
+PERSON_E::= pnombre {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();compi1_proyecto1.Compi1_Proyecto1.updateNameArch2((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} numero {:compi1_proyecto1.Compi1_Proyecto1.setXini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} coma numero {:compi1_proyecto1.Compi1_Proyecto1.setYini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} cParen {:compi1_proyecto1.Compi1_Proyecto1.activarEnemigo();:} PERSON_F;
+PERSON_F::= puntoComa PERSON_E | puntoComa;
+
+PAREDES_START::= aparedes {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew();:} PAREDES_H cparedes;
+PAREDES_H::= pnombre {:compi1_proyecto1.Compi1_Proyecto1.resetAllNew(); compi1_proyecto1.Compi1_Proyecto1.setNamePared((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} numero {:compi1_proyecto1.Compi1_Proyecto1.setXini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} PAREDES_I;
+PAREDES_I::= puntos numero {:compi1_proyecto1.Compi1_Proyecto1.setXfinal((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} coma PAREDES_J | coma PAREDES_J;
+PAREDES_J::= numero {:compi1_proyecto1.Compi1_Proyecto1.setYini((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} PAREDES_K;
+PAREDES_K::= puntos numero {:compi1_proyecto1.Compi1_Proyecto1.setYfinal((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} PAREDES_L | PAREDES_L;
+PAREDES_L::= cParen puntoComa {:compi1_proyecto1.Compi1_Proyecto1.nuevaPared();:} | cParen puntoComa {:compi1_proyecto1.Compi1_Proyecto1.nuevaPared();:} PAREDES_H;
+
+
+
+
+
