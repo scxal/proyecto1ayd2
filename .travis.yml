@@ -1,0 +1,6 @@
+language: java
+script: 
+ - cd Compi1Proyecto1
+ - ant compile
+ - ant jar
+ - ant unit-test
