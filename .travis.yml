@@ -1,6 +1,16 @@
 language: java
+install: 
+ - sudo apt-get install ant-optional
 script: 
  - cd Compi1Proyecto1
  - ant compile
  - ant jar
  - ant unit-test
+notifications:
+  email:
+    recipients:
+      - eliseosahuay@gmail.com
+      - scxal1429@gmail.com
+    on_success: always 
+    on_failure: always 
+
