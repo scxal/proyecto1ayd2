@@ -1,0 +1,95 @@
+<project name="Compi1_Proyecto1" basedir="." default="main">
+    
+    <property name="src.dir"     value="src"/>
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="main-class"  value="compi1_proyecto1.Compi1_Proyecto1"/>
+    <property name="pro.name"	 value="Compi1_Proyecto1" />
+    <property name="lib.dir"     value="lib"/>
+    <property name="checksum.dir" 	 value="checksum" />
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+	<record name="log.txt" action="start"/>
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" debug="on" includeDestClasses="true" includeantruntime="false"/>
+	<mkdir dir="${checksum.dir}" />	
+	<checksum todir="${checksum.dir}" totalproperty="sum.of.all">
+  		<fileset dir="${classes.dir}" />
+	</checksum>
+	<record name="log.txt" action="stop"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+	<record name="log.txt" action="start" append="true"/>
+        <jar destfile="${jar.dir}/${pro.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+	<record name="log.txt" action="stop"/>
+    </target>
+
+    <target name="run" depends="jar">
+	<record name="log.txt" action="start"/>
+        <java classname="${main-class}" fork="true" >
+		<classpath>
+                	<path refid="classpath"/>
+                	<path location="${jar.dir}/${pro.name}.jar"/>
+            	</classpath>
+	</java>
+	<record name="log.txt" action="stop"/>
+    </target>
+
+    <path id="classpath.test">
+    	<pathelement location="lib/junit-4.11.jar"/>
+    	<pathelement location="lib/hamcrest-core-1.3.jar"/>
+	<pathelement location="lib/java-cup-11b-runtime.jar"/>
+    	<pathelement location="build/classes"/>
+    </path>
+
+    <target name="unit-test" >
+	<record name="log.txt" action="start" append="true"/>
+  	<junit printsummary="yes" haltonfailure="yes" fork="no">
+    	<classpath>
+      		<path refid="classpath.test"/>
+    	</classpath>
+    	<formatter type="brief" usefile="false" />
+        <batchtest>
+            <fileset dir="src/PruebasUnitarias" includes="**.java" />
+        </batchtest>
+  	</junit>
+	<record name="log.txt" action="stop"/>
+    </target>
+
+    <target name="clean-build" depends="clean,jar"/>
+
+    <target name="main" depends="clean,run"/>
+
+    <target name = "generate-javadoc">
+   	<javadoc packagenames="*" sourcepath="${src.dir}" destdir = "doc" version = "true" windowtitle = "Proyecto 1 Compiladores 1">
+		<classpath>
+        		<path refid="classpath"/>
+    		</classpath>
+      		<doctitle><![CDATA[= Proyecto1 Compiladores 1 =]]></doctitle>
+      		<bottom>
+         		<![CDATA[Copyright © 2017. All Rights Reserved.]]>
+      		</bottom>
+      		<group title = "util packages" packages = "compi1_proyecto1"/>
+      		<group title = "web packages" packages = "parser1"/>
+      		<group title = "data packages" packages = "parser2"/>
+   	</javadoc>
+   
+   <echo message = "java doc fue creado!" />
+</target>
+
+</project>

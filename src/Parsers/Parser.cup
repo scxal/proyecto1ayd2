@@ -1,0 +1,68 @@
+package Parsers;
+import java_cup.runtime.*;
+parser code
+{:
+/**Metodo al que se llama automáticamente ante algún error sintactico.*/
+public void syntax_error(Symbol s){
+compi1_proyecto1.Menu.erroresText.setText(compi1_proyecto1.Menu.erroresText.getText().concat("\nError en la Línea " + (s.right+1) + ". Columna " + s.left + ". Identificador " + s.value + " no reconocido." ));
+compi1_proyecto1.Compi1_Proyecto1.clearListas();
+}
+/**Metodo al que se llama en el momento en que ya no es posible una recuperación de errores.*/
+public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+compi1_proyecto1.Menu.erroresText.setText(compi1_proyecto1.Menu.erroresText.getText().concat("\nError en la Línea " + (s.right+1) + ". Columna " + s.left + ". Identificador " + s.value + " no reconocido." ));
+compi1_proyecto1.Compi1_Proyecto1.clearListas();
+}
+:}
+terminal adesign, cdesign, xcreditos, xmeta, xbloque, xbonus, xbomba, xarma, afig, cfig, comilla, xtipo, xheroe, xenemigo, puntoComa, numero, aback, acorchete, ccorchete, coma, pxnombre, xnombre, ximg, igual, aconfig, cback, cconfig, xdescripcion, xdestruir, xvida;
+non terminal INICIA, A, AA, AB, AC, DESIGN_START, DESIGN_B, DESIGN_X, DESIGN_Y, DESIGN_V, DESIGN_A, FIG_START, S, FIG_A, FIG_B, FIG_Z, FIG_X, FIG_V, BACK_A, BACK_B, BACK_C, BACK_D, BACK_E, BACK_F, BACK_G;
+start with INICIA;
+
+INICIA::= S;
+S::= aconfig A cconfig {:compi1_proyecto1.Compi1_Proyecto1.mostrar();:};
+
+
+
+A::= BACK_A AA 
+    |FIG_START AB
+    |DESIGN_START AC;
+
+AA::= FIG_START DESIGN_START | DESIGN_START FIG_START;
+AB::= BACK_A DESIGN_START | DESIGN_START BACK_A;
+AC::= BACK_A FIG_START | FIG_START BACK_A;
+
+DESIGN_START::= adesign {:compi1_proyecto1.Compi1_Proyecto1.updateCategoria("design");:} DESIGN_A cdesign;
+DESIGN_A::= acorchete DESIGN_B DESIGN_V;
+DESIGN_B::= DESIGN_X | DESIGN_X DESIGN_B;
+DESIGN_X::= ximg igual comilla {:compi1_proyecto1.Compi1_Proyecto1.updateImg((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:}
+    |xnombre pxnombre {:compi1_proyecto1.Compi1_Proyecto1.updateName((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:}
+    |xtipo igual DESIGN_Y
+    |xdestruir igual numero {:compi1_proyecto1.Compi1_Proyecto1.updateDestruir((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} puntoComa
+    |xcreditos igual numero {:compi1_proyecto1.Compi1_Proyecto1.updateCreditos((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} puntoComa;
+DESIGN_Y::= xmeta {:compi1_proyecto1.Compi1_Proyecto1.updateTipo("x-meta");:}
+            |xbloque {:compi1_proyecto1.Compi1_Proyecto1.updateTipo("x-bloque");:} 
+            |xbonus {:compi1_proyecto1.Compi1_Proyecto1.updateTipo("x-bonus");:}
+            |xbomba {:compi1_proyecto1.Compi1_Proyecto1.updateTipo("x-bomba");:} 
+            |xarma {:compi1_proyecto1.Compi1_Proyecto1.updateTipo("x-arma");:};
+DESIGN_V::= ccorchete {:compi1_proyecto1.Compi1_Proyecto1.doSomething();:} | ccorchete {:compi1_proyecto1.Compi1_Proyecto1.doSomething();:} coma DESIGN_A;
+
+BACK_A::= aback {:compi1_proyecto1.Compi1_Proyecto1.updateCategoria("back");:} BACK_B;
+BACK_B::= acorchete  BACK_C;
+BACK_C::= BACK_D BACK_E BACK_F | BACK_E BACK_D BACK_F;
+BACK_D::= xnombre pxnombre {:compi1_proyecto1.Compi1_Proyecto1.updateName((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:};
+BACK_E::= ximg igual comilla {:compi1_proyecto1.Compi1_Proyecto1.updateImg((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:};
+BACK_F::= ccorchete {:compi1_proyecto1.Compi1_Proyecto1.doSomething();:} BACK_G;
+BACK_G::= coma BACK_B | cback;
+
+FIG_START::= afig {:compi1_proyecto1.Compi1_Proyecto1.updateCategoria("figure");:} FIG_A cfig;
+FIG_A::= acorchete FIG_B FIG_V;
+FIG_B::= FIG_Z | FIG_Z FIG_B;
+FIG_Z::= xdestruir igual numero {:compi1_proyecto1.Compi1_Proyecto1.updateDestruir((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value));:} puntoComa
+    |xtipo igual FIG_X
+    |xvida igual numero {:compi1_proyecto1.Compi1_Proyecto1.updateVida(((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value)));:} puntoComa 
+    |xnombre pxnombre {:compi1_proyecto1.Compi1_Proyecto1.updateName(((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value)));:}
+    |ximg igual comilla {:compi1_proyecto1.Compi1_Proyecto1.updateImg(((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value)));:}
+    |xdescripcion igual comilla {:compi1_proyecto1.Compi1_Proyecto1.updateDescripcion(((String) (((java_cup.runtime.Symbol) CUP$sintactico$stack.peek()).value)));:};
+FIG_X::= xheroe {:compi1_proyecto1.Compi1_Proyecto1.updateTipo("x-heroe");:} | xenemigo {:compi1_proyecto1.Compi1_Proyecto1.updateTipo("x-enemigo");:};
+FIG_V::= ccorchete {:compi1_proyecto1.Compi1_Proyecto1.doSomething();:} | ccorchete {:compi1_proyecto1.Compi1_Proyecto1.doSomething();:} coma FIG_A;
+
+    
